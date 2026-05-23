@@ -1,0 +1,9 @@
+.direnv/
+result
+game
+index.html
+index.js
+index.wasm
+odin.js
+game.wasm.o
+build/
