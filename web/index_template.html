@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>Odin + Raylib</title>
+	<style>
+		body {
+			margin: 0;
+			overflow: hidden;
+			background: #111;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			height: 100vh;
+		}
+		canvas { display: block; }
+	</style>
+</head>
+<body>
+	<canvas id="canvas" oncontextmenu="event.preventDefault()" tabindex="-1" onmousedown="event.target.focus()" onkeydown="event.preventDefault()"></canvas>
+
+	<script src="odin.js"></script>
+	<script>
+		var odinMemoryInterface = new odin.WasmMemoryInterface();
+		odinMemoryInterface.setIntSize(4);
+		var odinImports = odin.setupDefaultImports(odinMemoryInterface);
+
+		var Module = {
+			instantiateWasm: (imports, successCallback) => {
+				return WebAssembly.instantiateStreaming(fetch("index.wasm"), {...odinImports, ...imports}).then(out => {
+					var e = out.instance.exports;
+					odinMemoryInterface.setExports(e);
+					odinMemoryInterface.setMemory(e.memory);
+					return successCallback(out.instance);
+				});
+			},
+			onRuntimeInitialized: () => {
+				var e = wasmExports;
+				e._start();
+				e.main_start();
+				(function loop() {
+					if (e.main_update()) requestAnimationFrame(loop);
+					else { e.main_end(); e._end(); }
+				})();
+			},
+			canvas: document.getElementById("canvas")
+		};
+	</script>
+	{{{ SCRIPT }}}
+</body>
+</html>
