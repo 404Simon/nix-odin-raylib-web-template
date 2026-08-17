@@ -1,0 +1,1 @@
+- add debug mode with tracking allocator ([video 6](https://www.youtube.com/watch?v=jkJlpPyBdzk&list=PLxE7SoPYTef1jYHJ6NxNgocVjQKkq7eEa&index=6))
