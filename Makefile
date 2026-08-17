@@ -6,7 +6,8 @@ RAYLIB_WASM := build/raylib/libraylib.a
 all: desktop
 
 desktop:
-	odin build desktop -vet -strict-style -out:game
+	odin build desktop -vet -strict-style -out:game \
+		-o:speed -lto:thin -no-bounds-check -disable-assert
 
 $(RAYLIB_WASM):
 	@echo "Building raylib for WebAssembly..."
